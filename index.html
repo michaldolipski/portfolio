@@ -64,7 +64,7 @@
     }
     nav .logo { font-weight: 500; }
     nav ul { display: flex; gap: 2.5rem; list-style: none; }
-    nav ul a { position: relative; transition: opacity 0.3s; }
+    nav ul a { position: relative; transition: opacity 0.3s; cursor: pointer; }
     nav ul a::after {
       content: "";
       position: absolute;
@@ -131,7 +131,6 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
     
-    /* ZMIENIONE ŚCIEŻKI DO ZDJĘĆ POLAROID */
     .polaroid:nth-child(1) {
       transform: rotate(-8deg) translateX(-20px);
       background-image: url('photos/IMG_3922.jpg');
@@ -301,7 +300,7 @@
     /* ===================== MARQUEE ===================== */
     .marquee {
       overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-      padding: 2.5rem 0; display: flex; white-space: nowrap;
+      padding: 2.5rem 0; display: flex; white-space: nowrap; margin-bottom: 4rem;
     }
     .marquee-inner { display: flex; animation: scroll 35s linear infinite; gap: 3rem; }
     .marquee span {
@@ -317,32 +316,7 @@
       to   { transform: translateX(-50%); }
     }
 
-    /* ===================== CONTACT / FOOTER ===================== */
-    .contact { padding: 10rem 3vw 4rem; position: relative; }
-    .contact-big {
-      font-family: 'Big Shoulders Display', sans-serif; font-weight: 500;
-      font-size: clamp(3rem, 10vw, 13rem); line-height: 0.88;
-      letter-spacing: -0.02em; text-transform: uppercase;
-    }
-    .contact-big .email { display: inline-block; position: relative; transition: color 0.4s; }
-    .contact-big .email:hover { color: var(--accent); }
-    .contact-big .email::after {
-      content: "↗"; font-size: 0.5em; vertical-align: super; margin-left: 0.2em;
-      display: inline-block; transition: transform 0.3s;
-    }
-    .contact-big .email:hover::after { transform: translate(4px, -4px); }
-
-    .contact-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
-      padding-top: 4rem; border-top: 1px solid var(--line); margin-top: 4rem;
-    }
-    .contact-col h4 {
-      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500;
-      letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem;
-    }
-    .contact-col a, .contact-col p { font-size: 14px; line-height: 1.8; display: block; transition: color 0.3s; }
-    .contact-col a:hover { color: var(--accent); }
-
+    /* ===================== FOOTER ===================== */
     footer {
       display: flex; justify-content: space-between; padding: 2rem 3vw;
       border-top: 1px solid var(--line); font-family: 'JetBrains Mono', monospace;
@@ -362,22 +336,21 @@
     }
     .lb-img.swap { opacity: 0; }
 
-    .lb-btn {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      width: 58px; height: 58px; border-radius: 50%; background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 22px;
+    .lb-btn, .lb-close {
+      position: absolute; border-radius: 50%; background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.25); color: #fff;
       display: flex; align-items: center; justify-content: center; cursor: pointer;
       transition: background 0.3s, transform 0.3s; backdrop-filter: blur(6px);
+    }
+    .lb-btn {
+      top: 50%; transform: translateY(-50%); width: 58px; height: 58px; font-size: 22px;
     }
     .lb-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-50%) scale(1.06); }
     .lb-prev { left: 3vw; }
     .lb-next { right: 3vw; }
 
     .lb-close {
-      position: absolute; top: 3vh; right: 3vw; width: 48px; height: 48px;
-      border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.25);
-      color: #fff; font-size: 18px; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; backdrop-filter: blur(6px); transition: transform 0.3s;
+      top: 3vh; right: 3vw; width: 48px; height: 48px; font-size: 18px;
     }
     .lb-close:hover { transform: rotate(90deg); }
 
@@ -385,6 +358,47 @@
       position: absolute; bottom: 3vh; left: 50%; transform: translateX(-50%);
       color: rgba(255,255,255,0.7); font-family: 'JetBrains Mono', monospace;
       font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    }
+
+    /* ===================== CONTACT MODAL (NEW) ===================== */
+    .contact-modal {
+      position: fixed; inset: 0; background: rgba(10, 10, 10, 0.98);
+      z-index: 2000; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+      backdrop-filter: blur(15px);
+    }
+    .contact-modal.open {
+      opacity: 1; pointer-events: auto;
+    }
+    .contact-modal-content {
+      text-align: center;
+      transform: translateY(30px);
+      transition: transform 0.5s cubic-bezier(.2,.7,.2,1);
+    }
+    .contact-modal.open .contact-modal-content {
+      transform: translateY(0);
+    }
+    .contact-modal .contact-big {
+      font-family: 'Big Shoulders Display', sans-serif; font-weight: 500;
+      font-size: clamp(3rem, 10vw, 10rem); line-height: 0.88;
+      letter-spacing: -0.02em; text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+    .contact-modal .email { 
+      display: inline-block; position: relative; transition: color 0.4s; 
+    }
+    .contact-modal .email:hover { color: var(--accent); }
+    .contact-modal .email::after {
+      content: "↗"; font-size: 0.5em; vertical-align: super; margin-left: 0.2em;
+      display: inline-block; transition: transform 0.3s;
+    }
+    .contact-modal .email:hover::after { transform: translate(4px, -4px); }
+    
+    .contact-modal .details {
+      font-family: 'JetBrains Mono', monospace; font-size: 14px; 
+      letter-spacing: 0.2em; color: var(--muted);
+      display: flex; flex-direction: column; gap: 0.8rem;
+      margin-top: 2rem; text-transform: uppercase;
     }
 
     /* ===================== CUSTOM CURSOR ===================== */
@@ -405,7 +419,6 @@
       .hero-footer { grid-template-columns: 1fr; gap: 1rem; text-align: center; }
       .hero-footer .right, .hero-footer .center { text-align: center; }
       .featured { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr 1fr; }
       .section-number-row { grid-template-columns: 1fr 1fr; }
     }
   </style>
@@ -417,9 +430,8 @@
   <nav>
     <div class="logo">Michał Dolipski</div>
     <ul>
-      <li><a href="#gallery">Instagram</a></li>
-      <li><a href="#gallery">Gallery</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="https://www.instagram.com/dolip_sky/" target="_blank">Instagram</a></li>
+      <li><a id="navContactBtn">Contact</a></li>
     </ul>
   </nav>
 
@@ -518,19 +530,6 @@
     <div class="featured-image" style="background-image: url('photos/featured-main.jpg');"></div>
   </section>
 
-  <div class="marquee">
-    <div class="marquee-inner">
-      <span>Portraits</span><span class="star">✦</span>
-      <span class="accent">Concerts</span><span class="star">✦</span>
-      <span>Editorial</span><span class="star">✦</span>
-      <span class="accent">Streets</span><span class="star">✦</span>
-      <span>Portraits</span><span class="star">✦</span>
-      <span class="accent">Concerts</span><span class="star">✦</span>
-      <span>Editorial</span><span class="star">✦</span>
-      <span class="accent">Streets</span><span class="star">✦</span>
-    </div>
-  </div>
-
   <section class="stream">
     <div class="stream-label">
       <span>[ Latest / Feed ]</span>
@@ -553,39 +552,37 @@
     </div>
   </section>
 
-  <section class="contact" id="contact">
-    <h2 class="contact-big">
-      Let's<br>make<br>something —<br>
-      <a href="mailto:hello@alexmoreau.studio" class="email">hello@alexmoreau.studio</a>
-    </h2>
-
-    <div class="contact-grid">
-      <div class="contact-col">
-        <h4>[ Studio ]</h4>
-        <p>Torstraße 112<br>10119 Berlin<br>Germany</p>
-      </div>
-      <div class="contact-col">
-        <h4>[ Social ]</h4>
-        <a href="#">Instagram</a>
-        <a href="#">Are.na</a>
-        <a href="#">Behance</a>
-      </div>
-      <div class="contact-col">
-        <h4>[ Services ]</h4>
-        <p>Live music<br>Editorial<br>Portraits<br>Album artwork</p>
-      </div>
-      <div class="contact-col">
-        <h4>[ Clients ]</h4>
-        <p>Boiler Room<br>Resident Advisor<br>The Fader<br>Rolling Stone DE</p>
-      </div>
+  <div class="marquee">
+    <div class="marquee-inner">
+      <span>Portraits</span><span class="star">✦</span>
+      <span class="accent">Concerts</span><span class="star">✦</span>
+      <span>Editorial</span><span class="star">✦</span>
+      <span class="accent">Streets</span><span class="star">✦</span>
+      <span>Portraits</span><span class="star">✦</span>
+      <span class="accent">Concerts</span><span class="star">✦</span>
+      <span>Editorial</span><span class="star">✦</span>
+      <span class="accent">Streets</span><span class="star">✦</span>
     </div>
-  </section>
+  </div>
 
   <footer>
     <span>© 2026 Michał Dolipski</span>
     <span>Designed &amp; Built with ♥</span>
     <span>N 52.5200° — E 13.4050°</span>
   </footer>
+
+  <div class="contact-modal" id="contactModal">
+    <button class="lb-close" id="closeContactModal" aria-label="Close">×</button>
+    <div class="contact-modal-content">
+      <h2 class="contact-big">
+        Let's<br>make<br>something —<br>
+        <a href="#" class="email" id="copyEmailBtn">michaldol@interia.pl</a>
+      </h2>
+      <div class="details">
+        <p>+48 500 123 456</p>
+      </div>
+    </div>
+  </div>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
     <button class="lb-close" id="lbClose" aria-label="Close">×</button>
@@ -621,7 +618,6 @@
 
   const items = [];
   
-  // ZMIANA W SRYPCIE: teraz po prostu ładujemy oryginalne źródła z tagów, bez skalowania przez unsplash API
   masonryImgs.forEach(img => items.push({ src: img.src, alt: img.alt }));
   collectionCovers.forEach(col => {
     const bg = col.querySelector('.collection-cover').style.backgroundImage;
@@ -667,13 +663,55 @@
     else if (e.key === 'Escape') closeLb();
   });
 
-  // swipe
   let touchX = 0;
   lb.addEventListener('touchstart', e => { touchX = e.changedTouches[0].screenX; }, { passive: true });
   lb.addEventListener('touchend', e => {
     const dx = e.changedTouches[0].screenX - touchX;
     if (Math.abs(dx) > 50) dx < 0 ? next() : prev();
   }, { passive: true });
+
+  /* ---------- CONTACT MODAL SCRIPT ---------- */
+  const contactModal = document.getElementById('contactModal');
+  const navContactBtn = document.getElementById('navContactBtn');
+  const closeContactModal = document.getElementById('closeContactModal');
+  const copyEmailBtn = document.getElementById('copyEmailBtn');
+
+  navContactBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    contactModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  closeContactModal.addEventListener('click', () => {
+    contactModal.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+
+  contactModal.addEventListener('click', (e) => {
+    if (e.target === contactModal) {
+      contactModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && contactModal.classList.contains('open')) {
+      contactModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+
+  /* ---------- COPY EMAIL TO CLIPBOARD ---------- */
+  if (copyEmailBtn) {
+    copyEmailBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      navigator.clipboard.writeText('michaldol@interia.pl').then(() => {
+        alert('Skopiowano do schowka!');
+      }).catch(err => {
+        console.error('Błąd kopiowania: ', err);
+      });
+    });
+  }
 
   /* ---------- CUSTOM CURSOR ---------- */
   const cursor = document.getElementById('cursor');
@@ -688,7 +726,7 @@
   }
   loop();
 
-  document.querySelectorAll('a, button, .collection, #masonry img, .arrow-btn').forEach(el => {
+  document.querySelectorAll('a, button, .collection, #masonry img, .arrow-btn, #navContactBtn').forEach(el => {
     el.addEventListener('mouseenter', () => {
       cursor.style.width = '40px';
       cursor.style.height = '40px';
